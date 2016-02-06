@@ -21,7 +21,8 @@ tempor incididunt ut labore et dolore magna aliqua._
 
 ##### To run the ruby version
 
-+ ensure that ruby is installed (you can use [RVM](http://rvm.io), otherwise)
++ ensure that ruby is installed
++ download the files containing the tweets, stopwords, and questions.
 + head over to `irb` and type
 ```ruby
 # Load the required file into the environment
@@ -39,11 +40,11 @@ assignment.run_queries
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 #### Explanation
-+ algorithms
++ algorithms  
  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-+ data structures
++ data structures  
  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-+ optimizations that we used
++ optimizations that we used  
  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 #### Vocabulary size
