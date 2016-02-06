@@ -73,8 +73,11 @@ One resource you can explore is the package [ir.vsr](http://www.cs.utexas.edu/us
   * your names and student numbers. Specify how the tasks were divided between the team members
   * a detailed note about the functionality of your programs
   * complete instructions on how to run them
-  * Explain the algorithms, data structures, and optimizations that you used in each of the three steps. How big was the vocabulary? Include a sample of 100 tokens from your vocabulary.
-  * the first 10 answers to queries 1 and 25. Discuss your final results.
+  * explain the algorithms, data structures, and optimizations that you used in each of the three steps.
+  * how big was the vocabulary?
+  * include a sample of 100 tokens from your vocabulary.
+  * the first 10 answers to queries 1 and 25.
+  * discuss your final results.
   * the file named Results with the results for all the 49 test queries, in the required format. - ~~make sure all your programs run correctly in Java~~.
 - submit your assignment, including programs, README file, and Results file, as a zip file through Blackboard Learn.
 - don’t include the initial text collection or any external tools.

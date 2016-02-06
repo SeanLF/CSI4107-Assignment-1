@@ -91,9 +91,10 @@ class Assignment
 
   # Calculate the document frequencies (df) and idf and tf_idf weights.
   def calculate_tweet_weights
+    number_of_tweets = @tweets.size
     @index.each_value do | hash |
       document_frequency = hash[:weights].size
-      hash[:idf] = Math.log2(@tweets.keys.size / document_frequency)
+      hash[:idf] = Math.log2(number_of_tweets / document_frequency)
 
       # calculate weights for each document
       hash[:weights].each_pair do |tweet_id, term_frequency|
@@ -179,7 +180,7 @@ class Assignment
     end
 
     # Write to file
-    File.open('output.txt', 'w') do |f|
+    File.open('Output', 'w') do |f|
       linesToWrite.each do |line|
         f << line
       end

@@ -47,13 +47,15 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 #### Vocabulary size
- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+The vocabulary size in the Ruby version is _76773_ words.
 
 #### Sample tokens from our vocabulary.
- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ruby sample tokens: `[bbc, world, service, savage, cut, http, www, petitionbuzz, com, petition]`
 
 #### First 10 answers to queries 1 and 25.
- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- Ruby version:
+  - Query 1: `[30244402504929280, 32504175552102401, 33823403328671744, 32415024995631105, 29997693933719553, 30236884051435520, 30299217419304960, 30051954050727936, 30554037510213632, 30162553262841857]`
+  - Query 25: `[31286354960715777, 31550836899323904, 31738694356434944, 32864814447460352, 33198317529735169, 33174905985957888, 32955753920733184, 30767638397321217, 30704222135652352, 29993056316948480]`
 
 #### Discussion of our final results.
  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
