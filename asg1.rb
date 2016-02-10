@@ -37,8 +37,8 @@ class Assignment
     @index = Hash.new { |hash, word|
       hash[word] =
       {
-        weights: Hash.new(0.0),
-        idf: 0.0
+        weights: Hash.new(BigDecimal.new(0)),
+        idf: BigDecimal.new(0)
       }
     }
   end
@@ -48,7 +48,7 @@ class Assignment
     # For each tweet
     IO.readlines(corpus_file).each do |tweet|
       # find and store the tweet id
-      matches = tweet.match(/^(\d{17})/)
+      matches = tweet.match(/(\d{17})/)
       tweet_id = matches[1]
 
       # Get term frequencies. (hash[word symbol] = term frequency)
@@ -67,7 +67,7 @@ class Assignment
   end
 
   def calculate_term_frequencies(string)
-    frequencies = Hash.new(0.0)
+    frequencies = Hash.new(BigDecimal.new(0))
 
     # Get each word of length greater than 2.
     string.downcase.scan(/[[:alpha:]]{2,}/).each do |word|
@@ -84,17 +84,20 @@ class Assignment
     maximum_frequency = frequencies.values.max
 
     # Calculate term frequencies
-    frequencies.each { |word, frequency| frequencies[word] = frequency / maximum_frequency }
-
+    frequencies.each do |word, frequency|
+      frequencies[word] = frequency / maximum_frequency
+    end
     return frequencies
   end
 
   # Calculate the document frequencies (df) and idf and tf_idf weights.
   def calculate_tweet_weights
-    number_of_tweets = @tweets.size
-    @index.each_value do | hash |
-      document_frequency = hash[:weights].size
+    number_of_tweets = BigDecimal.new(@tweets.size)
+    @index.each do | word, hash |
+      document_frequency = BigDecimal.new(hash[:weights].size)
       hash[:idf] = Math.log2(number_of_tweets / document_frequency)
+      puts "#{word}, #{number_of_tweets} / #{document_frequency} = #{hash[:idf]}" if hash[:idf] == 0
+      puts "log2(#{number_of_tweets / document_frequency}) = #{hash[:idf]}" if hash[:idf] == 0
 
       # calculate weights for each document
       hash[:weights].each_pair do |tweet_id, term_frequency|
@@ -111,7 +114,7 @@ class Assignment
   end
 
   def query(string)
-    cosineSimilarities = Hash.new(0.0)
+    cosineSimilarities = Hash.new(BigDecimal.new(0))
     term_frequencies = calculate_term_frequencies(string)
     query_term_weights = calculate_query_weights(term_frequencies)
     relevant_tweets = get_relevant_tweets(term_frequencies.keys)
@@ -123,7 +126,7 @@ class Assignment
   end
 
   def calculate_query_weights(term_frequencies)
-    weights = Hash.new(0.0)
+    weights = Hash.new(BigDecimal.new(0))
     term_frequencies.each do |word, term_frequency|
       weights[word] = (0.5 + 0.5 * term_frequency) * (@index[word][:idf])
     end
@@ -140,27 +143,22 @@ class Assignment
 
   def calculate_cosine_similarity(tweet, query_term_weights)
     # Query words, and their weights
-    query_words = query_term_weights.keys
-    query_term_weights = query_term_weights.values
+    word_weights = BigDecimal.new(0)
+    word_squared_weights = BigDecimal.new(0)
+    tweet_squared_weights = BigDecimal.new(0)
 
     # The sum of weights for query words and sum of weights^2
-    query_word_sum = query_term_weights.inject(0, :+)
-    query_word_squared_sum = query_term_weights.inject(0) { |sum, item| sum + item*item }
-
-    # Take the words present in the query and get their weights for the current document.
-    values = []
-    query_words.each do |word|
-      values << @index[word][:weights][tweet]
+    query_term_weights.each do |word, query_word_weight|
+      word_weights += query_word_weight * @index[word][:weights][tweet]
+      word_squared_weights += query_word_weight**2
     end
 
-    # Calculate the sum of weights, and the sum of weights^2
-    document_word_sum = values.inject(0, :+)
-    document_word_squared_sum = values.inject(0) { |sum, item| sum + item*item }
+    # Calculate weights squared for words in tweets
+    @tweets[tweet].each do |word|
+      tweet_squared_weights += @index[word][:weights][tweet]**2
+    end
 
-    # Calculate the cosine similarity
-    cosSim = (query_word_sum + document_word_sum) / (Math.sqrt(query_word_squared_sum + document_word_squared_sum))
-
-    return cosSim
+    word_weights / Math.sqrt(word_squared_weights * tweet_squared_weights)
   end
 
   #### Run all queries and output to file
