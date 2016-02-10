@@ -175,12 +175,12 @@ class Assignment
     linesToWrite = Array.new
     results.each do |question, result|
       result.to_enum.with_index(1).each do |r, i|
-        linesToWrite << "MB1 Q#{question} #{r[0]} #{i} #{r[1]} rubyRun\n"
+        linesToWrite << "#{question} Q0 #{r[0]} #{i} #{r[1]} rubyRun\n"
       end
     end
 
     # Write to file
-    File.open('Output', 'w') do |f|
+    File.open('Output.TREC', 'w') do |f|
       linesToWrite.each do |line|
         f << line
       end
