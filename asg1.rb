@@ -1,4 +1,3 @@
-require 'active_support/inflector'
 require 'nokogiri'
 require 'active_support/all'
 
@@ -36,9 +35,9 @@ class Assignment
 
   # Fetches an array of stopword symbols.
   def fetch_stopwords(file_name)
-    @stopwords = File.open(file_name).read.split.map!(&:to_sym)
+    @stopwords = File.open(file_name).read.split
     # add our own
-    @stopwords << [:http, :com, :co, :ly, :https, :www]
+    @stopwords += ["rt"]
   end
 
   # Build index data structure.
@@ -60,7 +59,11 @@ class Assignment
       matches = tweet.match(/(\d{17})/)
       tweet_id = matches[1]
 
-      # Get term frequencies. (hash[word symbol] = term frequency)
+      # delete links & twitter users
+      regex = %r{(https?://)?[\da-z\.-]+\.[a-z\.]{2,6}[/\w \.-]*/?}
+      tweet.gsub!(regex, '')
+
+      # Get term frequencies. (hash[word string] = term frequency)
       term_frequencies = calculate_term_frequencies(tweet)
 
       # Store the term frequencies in the index.
@@ -80,8 +83,6 @@ class Assignment
 
     # Get each word of length greater than 2.
     string.downcase.scan(/[[:alpha:]]{2,}/).each do |word|
-      # Singularize the word and convert it to a symbol.
-      word = ActiveSupport::Inflector.singularize(word).to_sym
 
       # If the word isn't a stopword, increase its frequency.
       frequencies[word] += 1 unless @stopwords.include?(word)
@@ -202,3 +203,5 @@ class Assignment
     end
   end
 end
+
+a = Assignment.new
