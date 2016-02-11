@@ -23,32 +23,22 @@ tempor incididunt ut labore et dolore magna aliqua._
 
 + ensure that ruby is installed
 + download the files containing the tweets, stopwords, and questions.
-+ head over to `irb` and type
-```ruby
-# Load the required file into the environment
-require './asg1.rb'
-
-# Instantiate an assignment object.
-# It will fetch the stopwords, store the queries, build the index and assign weights.
-assignment = Assignment.new
-
-# This will run all of the queries and write the results to 'Output'
-assignment.run_queries
-```
++ head over to your terminal, and type: `ruby ./asg1.rb`
 
 ##### To run the Java version
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
 #### Explanation
-+ algorithms  
- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-+ data structures  
- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-+ optimizations that we used  
- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
++ _Ruby_ version
+  + **algorithms**
+  To find words, we downcase and singularize each word, then remove stopwords. We also add words to stopwords to remove common parts of URLs.
+  + **data structures**
+  We use the hash and array objects provided by Ruby. The array provides a few methods out of the box such as sorting and grouping. The hash is very useful when parsing the XML, properly building the index and also provides some useful methods.
+  + **optimizations that we used**
+  We noticed that the URL would be decomposed into words when possible and would increase the quantity of words per tweet. This could allow for lower scores considering that our information retrieval system is not meant to search for links, hashtags or users. We can remove users and common URL words.
 
 #### Vocabulary size
-The vocabulary size in the Ruby version is _76773_ words.
+The vocabulary size in the Ruby version is _76772_ words.
 
 #### Sample tokens from our vocabulary.
 Ruby sample tokens: `[bbc, world, service, savage, cut, http, www, petitionbuzz, com, petition]`

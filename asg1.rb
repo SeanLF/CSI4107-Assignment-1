@@ -10,25 +10,25 @@ class Assignment
 
   def initialize
     # Fetch stopwords & set up data structures.
-    puts "Fetching stopwords"
+    puts 'Fetching stopwords'
     fetch_stopwords('StopWords.txt')
 
     # keep a record of all tweet IDs.
     @tweets = {}
 
     # initialize the index data structure.
-    puts "Setting up index structure"
+    puts 'Setting up index structure'
     initialize_index_stucture
 
     # Get a hash of question numbers and questions.
-    puts "Parsing questions"
+    puts 'Parsing questions'
     parse_questions('topics_MB1-49.txt')
 
     # Build the index from the corpus of tweets.
-    puts "Building index"
+    puts 'Building index'
     build_index('Trec_microblog11.txt')
 
-    puts "Running all queries"
+    puts 'Running all queries'
     run_queries
   end
 
@@ -37,6 +37,8 @@ class Assignment
   # Fetches an array of stopword symbols.
   def fetch_stopwords(file_name)
     @stopwords = File.open(file_name).read.split.map!(&:to_sym)
+    # add our own
+    @stopwords << [:http, :com, :co, :ly, :https, :www]
   end
 
   # Build index data structure.
@@ -117,7 +119,8 @@ class Assignment
     @questions = {}
     xml = '<xml>' + IO.readlines(question_file).join.delete("\n") + '</xml>'
     Nokogiri::XML(xml).xpath('//top').each do |node|
-      question_number = node.xpath('num').text.match(/\sNumber\: MB(\d{3})\s/)[1].to_i
+      node_text = node.xpath('num').text
+      question_number = node_text.match(/\sNumber\: MB(\d{3})\s/)[1].to_i
       questions[question_number] = node.xpath('title').text.strip
     end
   end
