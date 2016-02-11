@@ -30,13 +30,13 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 
 #### Explanation
 + _Ruby_ version
-  + **algorithms**
+  + **algorithms**  
   To find words, we downcase each word, then remove stopwords. We also add words to stopwords to remove common parts of URLs.
-  + **data structures**
+  + **data structures**  
   We use the hash and array objects provided by Ruby. The array provides a few methods out of the box such as sorting and grouping. The hash is very useful when parsing the XML, properly building the index and also provides some useful methods.
-  + **optimizations that we used**
+  + **optimizations that we used**  
   We noticed that the URL would be decomposed into words when possible and would increase the quantity of words per tweet. This could allow for lower scores considering that our information retrieval system is not meant to search for links, hashtags or users. Removing the links before calculating the weights increased the accuracy by almost twofold.
-  + Suprising findings
+  + Suprising findings  
   Removing twitter users (ie. @BBCWitness) reduced our _precision at 5_ by 2.4%.
   Stemming words reduced our _precision at 5_ by 6.12%.
   Singularizing words reduced our _precision at 5_ by 2.85%.
