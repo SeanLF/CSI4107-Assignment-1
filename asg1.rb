@@ -10,37 +10,44 @@ class Assignment
 
   def initialize
     # Fetch stopwords & set up data structures.
+    puts "Fetching stopwords"
     fetch_stopwords('StopWords.txt')
 
     # keep a record of all tweet IDs.
-    @tweets = Hash.new
+    @tweets = {}
 
     # initialize the index data structure.
-    initialize_index_stucture()
+    puts "Setting up index structure"
+    initialize_index_stucture
 
     # Get a hash of question numbers and questions.
+    puts "Parsing questions"
     parse_questions('topics_MB1-49.txt')
 
     # Build the index from the corpus of tweets.
+    puts "Building index"
     build_index('Trec_microblog11.txt')
+
+    puts "Running all queries"
+    run_queries
   end
 
   #### Index logic
 
   # Fetches an array of stopword symbols.
   def fetch_stopwords(file_name)
-    @stopwords = File.open(file_name).read.split.map! {|stopword| stopword.to_sym}
+    @stopwords = File.open(file_name).read.split.map!(&:to_sym)
   end
 
   # Build index data structure.
   def initialize_index_stucture
-    @index = Hash.new { |hash, word|
+    @index = Hash.new do |hash, word|
       hash[word] =
-      {
-        weights: Hash.new(BigDecimal.new(0)),
-        idf: BigDecimal.new(0)
-      }
-    }
+        {
+          weights: Hash.new(BigDecimal.new(0)),
+          idf: BigDecimal.new(0)
+        }
+    end
   end
 
   # Build the index.
@@ -63,7 +70,7 @@ class Assignment
     end
 
     # Store inverse document frequencies in the index
-    calculate_tweet_weights()
+    calculate_tweet_weights
   end
 
   def calculate_term_frequencies(string)
@@ -75,9 +82,7 @@ class Assignment
       word = ActiveSupport::Inflector.singularize(word).to_sym
 
       # If the word isn't a stopword, increase its frequency.
-      unless @stopwords.include?(word)
-        frequencies[word] += 1
-      end
+      frequencies[word] += 1 unless @stopwords.include?(word)
     end
 
     # get the maximum frequency
@@ -87,17 +92,17 @@ class Assignment
     frequencies.each do |word, frequency|
       frequencies[word] = frequency / maximum_frequency
     end
-    return frequencies
+
+    # return
+    frequencies
   end
 
   # Calculate the document frequencies (df) and idf and tf_idf weights.
   def calculate_tweet_weights
     number_of_tweets = BigDecimal.new(@tweets.size)
-    @index.each do | word, hash |
+    @index.each do |_, hash|
       document_frequency = BigDecimal.new(hash[:weights].size)
       hash[:idf] = Math.log2(number_of_tweets / document_frequency)
-      puts "#{word}, #{number_of_tweets} / #{document_frequency} = #{hash[:idf]}" if hash[:idf] == 0
-      puts "log2(#{number_of_tweets / document_frequency}) = #{hash[:idf]}" if hash[:idf] == 0
 
       # calculate weights for each document
       hash[:weights].each_pair do |tweet_id, term_frequency|
@@ -110,19 +115,24 @@ class Assignment
 
   def parse_questions(question_file)
     @questions = {}
-    Nokogiri::XML("<xml>"+IO.readlines(question_file).join.gsub("\n","")+"</xml>").xpath('//top').each { |node| questions[node.xpath('num').text.match(/\sNumber\: MB(\d{3})\s/)[1].to_i] = node.xpath('title').text.strip }
+    xml = '<xml>' + IO.readlines(question_file).join.delete("\n") + '</xml>'
+    Nokogiri::XML(xml).xpath('//top').each do |node|
+      question_number = node.xpath('num').text.match(/\sNumber\: MB(\d{3})\s/)[1].to_i
+      questions[question_number] = node.xpath('title').text.strip
+    end
   end
 
   def query(string)
-    cosineSimilarities = Hash.new(BigDecimal.new(0))
+    cosine_similarities = Hash.new(BigDecimal.new(0))
     term_frequencies = calculate_term_frequencies(string)
     query_term_weights = calculate_query_weights(term_frequencies)
     relevant_tweets = get_relevant_tweets(term_frequencies.keys)
     relevant_tweets.each do |tweet|
-      cosineSimilarities[tweet] = calculate_cosine_similarity(tweet, query_term_weights)
+      cosine_similarities[tweet] = calculate_cosine_similarity(tweet, query_term_weights)
     end
 
-    return cosineSimilarities.sort_by { |tweet, value| value }.reverse
+    # return
+    cosine_similarities.sort_by { |_, value| value }.reverse
   end
 
   def calculate_query_weights(term_frequencies)
@@ -130,15 +140,19 @@ class Assignment
     term_frequencies.each do |word, term_frequency|
       weights[word] = (0.5 + 0.5 * term_frequency) * (@index[word][:idf])
     end
-    return weights
+
+    # return
+    weights
   end
 
   def get_relevant_tweets(words)
-    documents = Array.new
+    documents = []
     words.each do |word|
       documents += @index[word][:weights].keys
     end
-    return documents.uniq
+
+    # return
+    documents.uniq
   end
 
   def calculate_cosine_similarity(tweet, query_term_weights)
@@ -164,22 +178,22 @@ class Assignment
   #### Run all queries and output to file
 
   def run_queries
-    results = Hash.new
+    results = {}
     # Run all queries and store results
     @questions.each do |question_number, question|
       results[question_number] = query(question).first(1000)
     end
 
-    linesToWrite = Array.new
+    lines_to_write = []
     results.each do |question, result|
       result.to_enum.with_index(1).each do |r, i|
-        linesToWrite << "#{question} Q0 #{r[0]} #{i} #{r[1]} rubyRun\n"
+        lines_to_write << "#{question} Q0 #{r[0]} #{i} #{r[1]} rubyRun\n"
       end
     end
 
     # Write to file
     File.open('Output.TREC', 'w') do |f|
-      linesToWrite.each do |line|
+      lines_to_write.each do |line|
         f << line
       end
     end
