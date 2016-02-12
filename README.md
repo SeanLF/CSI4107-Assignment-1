@@ -44,7 +44,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
   We use the hash and array objects provided by Ruby. The array provides methods such as sorting, array merging, finding unique elements and reversing itself. It also provides a `.each` method to iterate through its elements.  
   The hash object proved to be very useful when parsing the XML, properly building the index. It provides some useful methods such as returning an array of its keys or values. The hash also provides a `.each` method that allows iteration with the key and/or value.
   + **optimizations that we used**  
-  We noticed that URLs within tweets were decomposed into words and would in turn increase the quantity of words per tweet. This generally lowered the precision of our IR system. Considering that it was not designed to search for links or users, we simply removed them from the tweet before its analysis.
+  We noticed that URLs within tweets were decomposed into words and would in turn increase the quantity of words per tweet. This generally lowered the precision of our IR system. Considering that it was not designed to search for links, we simply removed them from the tweet before its analysis.
 
 #### Vocabulary size
 The vocabulary size in the Ruby solution is _59874_ words.
