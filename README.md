@@ -28,23 +28,41 @@ To run the ruby solution:
 + download the files containing the tweets, stopwords, and questions.
 + head over to your terminal, and type: `ruby ./asg1.rb`
 
-##### To run the Java version
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-
 #### Explanation
 + _Ruby_ version
-  + **algorithms**  
+  + **Algorithms**  
     Each line in the tweet corpus represents a tweet. It uses the following format: `tweet_id    tweet_content`. Therefore, we analyze the corpus by lines. 
     1. Find, store and remove the 17 digit integer tweed ID from the line.
     2. We then use a regular expression to find and remove URLs.
     3. Whatever is left is downcased and scanned with a regular expression matching at words formed by at least 2 latin characters; thus removing most of the non-english words.
     4. We count the frequency of the words in the tweet. Each frequency is then divided by the maximum word frequency in the tweet. We also store the unique words for each tweet. The term frequencies are stored in our inverted index.
     5. Calculate the inverse document frequency using the inverted index (the unique number of documents that each word appears in) and calculate the weights for each word in every tweet. We replace the term frequencies by the tf_idf weights in our inverted index.  
-  + **data structures**  
+  + **Data structures**  
   We use the hash and array objects provided by Ruby. The array provides methods such as sorting, array merging, finding unique elements and reversing itself. It also provides a `.each` method to iterate through its elements.  
   The hash object proved to be very useful when parsing the XML, properly building the index. It provides some useful methods such as returning an array of its keys or values. The hash also provides a `.each` method that allows iteration with the key and/or value.
-  + **optimizations that we used**  
+  + **Optimizations that we used**  
   We noticed that URLs within tweets were decomposed into words and would in turn increase the quantity of words per tweet. This generally lowered the precision of our IR system. Considering that it was not designed to search for links, we simply removed them from the tweet before its analysis.
+
++ _Java_ version
+  * **Algorithms**  
+  The tokenization and indexing is as follows:
+    1.	To find words, we read the tweets file line by line, splitting each line by white space to initially tokenize words to process them further individually. 
+    2.	We down-case each word.
+    3.	We remove any URLs by using a regular expression to identify them.
+    4.	We remove any symbols from the words.
+    5.	We stem each word adding the word and its stem to the index only if they aren’t a stop word.
+    The query processing is done as follows:
+    1.	We convert the query into a tweet, so it can be tokenized into a word vector with an inverse frequency
+    2.	For each word for found we retrieve the tweets with those words
+    3.	We compare using the cosine vector comparison the query vector and each tweet sharing words with the query
+    4.	We order the tweets by rank
+  * **Data structures**  
+  Java Hash tables, Java Lists, and Java Arrays were used as data structures for the robust indexing of words in the tweets.
+  Arrays: Stopwords were added in lexicographical order to a string array. Looking up a stop word could be done using a binary search, which is efficient. Hence, this is an effective data structure for identifying stop words. 
+  Hash Tables: Hash tables were used to hold words found in each tweet. The word (string) is the key, and the number of words occurring in the tweet is stored as a value. Hence, tweets had their word vectors. The total word frequencies for all the tweets were stored in a hash table, the word (string) as the key and the number of total occurrences as the value. To lookup the tweets that have a given word, we used a hash table. The word (string) was the key, and the list (java.util.ArrayList) of tweets containing the word as the value. Thus looking up tweets that have a given word was done efficiently and looking up words found in a tweet was done efficiently. 
+  The inverse frequency table was a hash table of tweets (the hash key was the twitter id, a string). The values stored in the inverse frequency table were the word vectors (hash table of words) for the tweet. The word vector had the inverse frequency of each word found in the tweet.
+  * **Optimizations that we used**  
+  URLs added to the index lowered the precision of our results. We decided to remove URLs from the index. We also decided to stem words and add the stem along with the word to the index, to allow general queries to find the stem of a word and it can find a more specific word.
 
 #### Vocabulary size
 The vocabulary size in the Ruby solution is _59874_ words.
