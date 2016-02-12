@@ -18,22 +18,22 @@ An example topic could be in the following format:
 ```
 Implement your IR system using the steps pointed below as guidelines. Alternatively, you can use any existing IR system available, and adapt it to accomplish the same steps, on the provided Twitter collection.
 
-Step1. [5 points] **Preprocessing**: Implement preprocessing functions for tokenization and stopword removal. The index terms will be all the words left after filtering out punctuation tokens, numbers, stopwords, etc. Optionally, you can use the Porter stemmer to stem the index words.
+Step :one:. [5 points] **Preprocessing**: Implement preprocessing functions for tokenization and stopword removal. The index terms will be all the words left after filtering out punctuation tokens, numbers, stopwords, etc. Optionally, you can use the Porter stemmer to stem the index words.
   • _Input_: Documents that are read one by one from the collection
   • _Output_: Tokens to be added to the index (vocabulary)
 
-Step 2. [5 points] **Indexing**: Build an inverted index, with an entry for each word in the vocabulary. You can use any appropriate data structure (hash table, linked lists, Access database, etc.). An example of possible index is presented below.
+Step :two:. [5 points] **Indexing**: Build an inverted index, with an entry for each word in the vocabulary. You can use any appropriate data structure (hash table, linked lists, Access database, etc.). An example of possible index is presented below.
 • Input: Tokens obtained from the preprocessing module
 • Output: An inverted index for fast access
 
   For weighting, you can use the tf-idf weighting scheme (w_ij = tf_ij x idf_i). For each query, your system will produce a ranked list of documents, starting with the most similar to the query and ending with the least similar. For the query terms, you can use a modified tf-idf weighting scheme w_iq = (0.5 + 0.5 tf_iq)·idf_i
 
-Step 3. [5 points] **Retrieval and Ranking**: Use the inverted index (from step 2) to find the limited set of documents that contain at least one of the query words. Compute the similarity scores between a query and each document (using cosine or other method).
+Step :three:. [5 points] **Retrieval and Ranking**: Use the inverted index (from step 2) to find the limited set of documents that contain at least one of the query words. Compute the similarity scores between a query and each document (using cosine or other method).
 • Input: One query and the Inverted Index (from Step2)
 • Output: Similarity values between the query and each of the documents. Rank the documents in
 decreasing order of similarity scores.
 
-Step 4. [10 points] **Results file**: Run your system on the set of test queries. Include the output in your submission as a file named Results.
+Step :four:. [10 points] **Results file**: Run your system on the set of test queries. Include the output in your submission as a file named Results.
 The file should have the following TREC format. Include the top-1000 results for each query (the queries should be ordered in ascending order):
 ```
 topic_id Q0 docno rank score tag
@@ -48,7 +48,7 @@ MB01 Q0 3857291214283390 1000 0.000001 myRun
 ...
 ```
 
-Step 5. [10 points] **Evaluation**:
+Step :five:. [10 points] **Evaluation**:
 For evaluation, you can use the [trec_eval script](http://trec.nist.gov/trec_eval/_. The main evaluation measures will be MAP (mean average precision) and P@10 (precision in the first 10 documents retrieved). Compare your results with the expected
 results, from the relevance feedback file, available [here](http://www.site.uottawa.ca/~diana/csi4107/A1_2016/Trec_microblog11-qrels.txt), in the following format:
 ```
