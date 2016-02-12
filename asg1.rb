@@ -36,8 +36,6 @@ class Assignment
   # Fetches an array of stopword symbols.
   def fetch_stopwords(file_name)
     @stopwords = File.open(file_name).read.split
-    # add our own
-    @stopwords += ["rt"]
   end
 
   # Build index data structure.
@@ -74,7 +72,7 @@ class Assignment
       @tweets[tweet_id] = term_frequencies.keys
     end
 
-    # Store inverse document frequencies in the index
+    # Store inverse document frequencies and weights in the index
     calculate_tweet_weights
   end
 
@@ -83,7 +81,6 @@ class Assignment
 
     # Get each word of length greater than 2.
     string.downcase.scan(/[[:alpha:]]{2,}/).each do |word|
-
       # If the word isn't a stopword, increase its frequency.
       frequencies[word] += 1 unless @stopwords.include?(word)
     end
