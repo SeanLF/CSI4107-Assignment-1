@@ -40,12 +40,15 @@ topic_id Q0 docno rank score tag
 ```
 where: topic_id is the topic/query number, Q0 is an unused field (the literal 'Q0'), docno is the tweet id, rank is the rank assigned by your system to the segment (1 is the highest rank), score is the computed degree of match between the segment and the topic, and tag is a unique identifier you chose for this run (same for every topic). Example:
 ```
-MB01 Q0 3857291841983309 1 0.999 myRun
-MB01 Q0 3857291841983302 2 0.878 myRun
-MB01 Q0 3857291841983301 3 0.314 myRun
+1 Q0 3857291841983309 1 0.999 myRun
+1 Q0 3857291841983302 2 0.878 myRun
+1 Q0 3857291841983301 3 0.314 myRun
 ...
-MB01 Q0 3857291214283390 1000 0.000001 myRun
+1 Q0 3857291214283390 1000 0.000001 myRun
 ...
+2 Q0 3857291841983309 1 0.999 myRun
+...
+49 Q0 3857291841983301 1000 0.001 myRun
 ```
 
 Step :five:. [10 points] **Evaluation**:
