@@ -35,7 +35,7 @@ To run the ruby solution:
     Each line in the tweet corpus represents a tweet. It uses the following format: `tweet_id    tweet_content`. Therefore,  the corpus is analyzed line by line (described below in sequential order). 
       1. Find, store and remove the 17 digit integer tweed ID from the line.
       2. Use a regular expression to find and remove URLs.
-      3. Downcase whatever is left and scan with a regular expression matching words formed by at least 2 Latin characters; thus removing most of the non-English words.
+      3. Downcase whatever is left and scan with a regular expression matching words formed by at least 2 characters from any alphabet (English, Arabic, Cyrillic...).
       4. Count the frequency of the words in the tweet. Each frequency is then divided by the maximum word frequency in the tweet.
       5. Store the unique words for each tweet.
       6. The term frequencies are stored in the inverted index.
@@ -103,6 +103,7 @@ There were some surprising findings from the ruby version:
 + Stemming words reduced our _precision at 5_ by 6.12%.
 + Singularizing words reduced our _precision at 5_ by 2.85%.
 + Removing links increased our _precision at 5_ from 10.61% to 32.65%.
++ Ignoring words in a non-Latin alphabets reduced our _precision at 5_ by 1.63%.
 
 Final results:
 ```bash
