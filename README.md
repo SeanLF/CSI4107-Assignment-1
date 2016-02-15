@@ -33,15 +33,29 @@ To run the ruby solution:
 
   + **Algorithms**  
     Each line in the tweet corpus represents a tweet. It uses the following format: `tweet_id    tweet_content`. Therefore,  the corpus is analyzed line by line (described below in sequential order). 
-    1. Find, store and remove the 17 digit integer tweed ID from the line.
-    2. Use a regular expression to find and remove URLs.
-    3. Downcase whatever is left and scan with a regular expression matching words formed by at least 2 Latin characters; thus removing most of the non-English words.
-    4. Count the frequency of the words in the tweet. Each frequency is then divided by the maximum word frequency in the tweet. Also store the unique words for each tweet. The term frequencies are stored in the inverted index.
-    5. Calculate the inverse document frequency using the inverted index (the unique number of documents in which each word appears) and calculate the weights for each word in every tweet. Replace the term frequencies by the tf_idf weights in the inverted index.
+      1. Find, store and remove the 17 digit integer tweed ID from the line.
+      2. Use a regular expression to find and remove URLs.
+      3. Downcase whatever is left and scan with a regular expression matching words formed by at least 2 Latin characters; thus removing most of the non-English words.
+      4. Count the frequency of the words in the tweet. Each frequency is then divided by the maximum word frequency in the tweet.
+      5. Store the unique words for each tweet.
+      6. The term frequencies are stored in the inverted index.
+      7. Calculate the inverse document frequency using the inverted index (the unique number of documents in which each word appears)
+      8. Calculate the weights for each word in every tweet.
+      9. Replace the term frequencies by the tf_idf weights in the inverted index.
+    
+    Processing queries:
+      1. Re-use the algorithm above to find the words contained in the query (points 3 and 4 above).
+      2. Re-use the algorithm above to calculate the query word weights.
+      3. Find the unique documents that contain at least one query word.
+      4. Use the cosine vector comparison to compare the query vector and each tweet sharing words with the query.
+      5. Order the tweets by rank.
 
   + **Data structures**  
-  The hash and array objects used are provided by Ruby. The array provides methods such as sorting, array merging, finding unique elements and reversing itself. It also provides a `.each` method to iterate through its elements.  
-  The hash object proved to be very useful when parsing the XML, properly building the index. It provides some useful methods such as returning an array of its keys or values. The hash also provides a `.each` method that allows iteration with the key and/or value.
+  The hash and array objects used are provided by Ruby.
+    + The array provides methods such as sorting, array merging, finding unique elements and reversing itself, and checking if an element is contained. It also provides a `.each` method to iterate through its elements.  
+      -> The stop words are contained in an array.  
+    + The hash object proved to be very useful when parsing the XML, and properly building the index. It provides some useful methods such as returning an array of its keys or values. The hash also provides a `.each` method that allows iteration with the key and/or value.  
+      -> The inverted index uses a hash table. The keys to the hash are unique words from the tweet corpus. Each word points to another hash that contains the inverse document frequency as well as yet another hash. This last hash uses tweet IDs as keys and tf_idf weights as values.
 
   + **Optimizations that we used**  
   Because URLs within tweets were decomposed into words, the quantity of words per tweet increased, generally lowering the precision of our IR system. Considering that the system was not designed to search for links, we simply removed them from the tweet before we conducted an analysis.
@@ -50,17 +64,17 @@ To run the ruby solution:
 
   + **Algorithms**  
     Our tokenization and indexing method follows:
-      1.	To find words, we read the tweets file line by line, splitting each line by white space to initially tokenize words to process them further individually. 
-      2.	Lowercase each word.
-      3.	Remove any URLs by using a regular expression to identify them.
-      4.	Remove any symbols from the words.
-      5.	Stem each word adding the word and its stem to the index only if they aren’t a stop word.  
+      1. To find words, we read the tweets file line by line, splitting each line by white space to initially tokenize words to process them further individually. 
+      2. Lowercase each word.
+      3. Remove any URLs by using a regular expression to identify them.
+      4. Remove any symbols from the words.
+      5. Stem each word adding the word and its stem to the index only if they aren’t a stop word.  
 
     The query processing is done as follows:
-      1.	convert the query into a tweet, so it can be tokenized into a word vector with an inverse frequency
-      2.	For each word found, retrieve the tweets with those words
-      3.	Use the cosine vector comparison to compare the query vector and each tweet sharing words with the query
-      4.	Order the tweets by rank
+      1. Convert the query into a tweet, so it can be tokenized into a word vector with an inverse frequency.
+      2. For each word found, retrieve the tweets with those words.
+      3. Use the cosine vector comparison to compare the query vector and each tweet sharing words with the query.
+      4. Order the tweets by rank.
 
   + **Data structures**  
   Java Hash tables, Java Lists, and Java Arrays were used as data structures for the robust indexing of words in the tweets.
